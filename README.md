@@ -1,3 +1,3 @@
 # random-th-idcard
 
-Demo: https://random-th-idcard.web.app/
+Live demo: https://random-th-idcard.web.app/
