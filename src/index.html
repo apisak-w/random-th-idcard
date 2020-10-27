@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Random Thai IDCard</title>
+    <link rel="stylesheet" type="text/css" href="./assets/css/fictoan.css" media="all">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <section class="padded-content">
+        <div class="row">
+            <div class="portion whole">
+                <div class="border-thick margin-bottom-tiny"></div>
+                <h1 class="text-hue margin-bottom-fixed">
+                    <strong>Random Thai IDCard</strong>
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="portion whole">
+                <button id="randomBtn" class="bg-blue text-white size-huge">Random</button>
+            </div>
+        </div>
+        <div class="row" id="resultArea" style="display: none;">
+            <div class="portion half">
+                <div class="ff-form-unit-group unit-prefix">
+                    <input id="unFormattedIdCard" onclick="this.setSelectionRange(0, this.value.length)" class="ff-input" value="" readonly />
+                    <label>IDCard No.</label>
+                    <button class="unit-suffix ff-button shape-rounded bg-white text-hue border-hue" onclick="copyTextByElementId('unFormattedIdCard')">Copy</button>
+                </div>
+            </div>
+            <div class="portion half">
+                <div class="ff-form-unit-group unit-prefix">
+                    <input id="formattedIdCard" onclick="this.setSelectionRange(0, this.value.length)" class="ff-input" value="" readonly />
+                    <label>Formatted IDCard No.</label>
+                    <button class="unit-suffix ff-button shape-rounded bg-white text-hue border-hue" onclick="copyTextByElementId('formattedIdCard')">Copy</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC9ykDnyH5-RddgNC3r1r6bZ3rt26wJn9E",
+            authDomain: "random-th-idcard.firebaseapp.com",
+            databaseURL: "https://random-th-idcard.firebaseio.com",
+            projectId: "random-th-idcard",
+            storageBucket: "random-th-idcard.appspot.com",
+            messagingSenderId: "508203570102",
+            appId: "1:508203570102:web:7a381ad2800114b3d22717"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <script src="./assets/js/random_idcard.js"></script>
+    <script>
+        const resultAreaElementId = 'resultArea';
+
+        function copyTextByElementId(elementId) {
+            const textFromElementToCopy = document.querySelector(`#${elementId}`);
+
+            textFromElementToCopy.select();
+            // textFromElementToCopy.setSelectionRange(0, textFromElementToCopy.value.length); /*For mobile devices*/
+
+            document.execCommand("copy");
+        }
+
+        function setValueByElementId(valueToSet, elementId) {
+            document.querySelector(`#${elementId}`).value = valueToSet;
+        }
+
+        function isResultAreaVisible() {
+            return (document.querySelector(`#${resultAreaElementId}`).style.display !== "none");
+        }
+
+        function showResultArea() {
+            document.querySelector(`#${resultAreaElementId}`).style.display = "";
+        }
+
+        document.querySelector('#randomBtn').addEventListener("click", (e) => {
+            e.preventDefault();
+
+            if (!isResultAreaVisible()) {
+                showResultArea();
+            }
+
+            const resultRandom = randomIdCard();
+
+            setValueByElementId(resultRandom.unformatted, "unFormattedIdCard");
+            setValueByElementId(resultRandom.formatted, "formattedIdCard");
+        });
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./assets/js/sw.js')
+                .then(function () {
+                    console.log('Service Worker Registered');
+                });
+        }
+    </script>
+
+</body>
+
+</html>
